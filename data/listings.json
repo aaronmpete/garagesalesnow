@@ -1,12 +1,12 @@
 [
   {
-    "title": "lkj",
-    "description": "lkj",
+    "id": 1,
+    "title": "Bellevue Test Sale",
+    "description": "Test items",
     "location": "98008",
-    "date": "2025-07-18",
+    "date": "2025-07-15",
     "itemType": "furniture",
-    "lat": 47.6116244,
-    "lng": -122.1172925,
-    "id": 1
+    "lat": 47.6101,
+    "lng": -122.2007
   }
 ]
