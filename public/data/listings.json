@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "title": "Bellevue Test Sale",
+    "description": "Test items",
+    "location": "98008",
+    "date": "2025-07-15",
+    "itemType": "furniture",
+    "lat": 47.6101,
+    "lng": -122.2007
+  }
+]

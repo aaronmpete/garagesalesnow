@@ -3,7 +3,7 @@ const path = require('path');
 const axios = require('axios');
 
 exports.handler = async function (event) {
-    const listingsPath = path.join(__dirname, '../data/listings.json');
+    const listingsPath = path.join(process.cwd(), '../../public/data/listings.json');
 
     try {
         console.log('Method:', event.httpMethod);
