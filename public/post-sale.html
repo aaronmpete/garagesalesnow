@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post a Garage Sale - GarageSalesNow</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Post a Garage Sale</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="container my-4">
-        <h1>Post a Garage Sale</h1>
-        <form id="saleForm">
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Post a Garage Sale</h1>
+        <form id="saleForm" class="mx-auto" style="max-width: 600px;">
             <div class="mb-3">
-                <label for="title" class="form-label">Sale Title</label>
+                <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" required>
             </div>
             <div class="mb-3">
@@ -20,7 +20,7 @@
                 <textarea class="form-control" id="description" required></textarea>
             </div>
             <div class="mb-3">
-                <label for="location" class="form-label">Location (Address, City, State)</label>
+                <label for="location" class="form-label">Location (City or Zip)</label>
                 <input type="text" class="form-control" id="location" required>
             </div>
             <div class="mb-3">
@@ -31,36 +31,41 @@
                 <label for="itemType" class="form-label">Item Type</label>
                 <select class="form-select" id="itemType" required>
                     <option value="furniture">Furniture</option>
-                    <option value="clothing">Clothing</option>
-                    <option value="electronics">Electronics</option>
                     <option value="collectibles">Collectibles</option>
-                    <option value="other">Other</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Post Sale</button>
+            <button type="submit" class="btn btn-primary">Submit Sale</button>
         </form>
+        <div id="errorMessage" class="text-danger text-center mt-3"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.7.2/dist/axios.min.js"></script>
     <script>
-        document.getElementById('saleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const listing = {
+        document.getElementById('saleForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = '';
+
+            const sale = {
                 title: document.getElementById('title').value,
                 description: document.getElementById('description').value,
                 location: document.getElementById('location').value,
                 date: document.getElementById('date').value,
                 itemType: document.getElementById('itemType').value,
-                lat: 39.8283, // Placeholder; use geocoding API in production
-                lng: -98.5795
+                lat: 0, // Placeholder, update with geocoding if needed
+                lng: 0
             };
+
             try {
-                await axios.post('/api/post-listing', listing);
-                alert('Sale posted successfully!');
-                window.location.href = '/index.html';
+                const response = await axios.post('/api/listings', sale);
+                if (response.status === 200) {
+                    window.location.href = '/';
+                }
             } catch (error) {
                 console.error('Error posting sale:', error);
-                alert('Failed to post sale. Please try again.');
+                errorMessage.textContent = 'Failed to post sale, try again.';
             }
         });
     </script>
