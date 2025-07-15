@@ -7,20 +7,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        #map { height: 500px; margin-top: 20px; }
+        .filters { margin-bottom: 20px; }
+    </style>
 </head>
 <body>
     <div class="container my-5">
         <h1 class="text-center mb-4">Garage Sales</h1>
         <div class="filters">
-            <input type="text" class="form-control mb-3" id="searchInput" placeholder="Enter city or zip code">
-            <select class="form-select mb-3" id="itemType">
-                <option value="">All Items</option>
-                <option value="furniture">Furniture</option>
-                <option value="collectibles">Collectibles</option>
-                <option value="electronics">Electronics</option>
-                <option value="clothing">Clothing</option>
-            </select>
-            <button class="btn btn-primary" onclick="searchListings()">Search</button>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Enter city or zip code (US only)">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <select class="form-select" id="itemType">
+                        <option value="">All Items</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="collectibles">Collectibles</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <button class="btn btn-primary w-100" onclick="searchListings()">Search</button>
+                </div>
+            </div>
         </div>
         <div id="map"></div>
         <div id="listings" class="row mt-4"></div>
@@ -29,9 +41,9 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.7.2/dist/axios.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        let map = L.map('map').setView([39.7817, -89.6501], 10);
+        let map = L.map('map').setView([39.8283, -98.5795], 4); // Default to US center
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         async function searchListings() {
@@ -47,6 +59,11 @@
                     if (layer instanceof L.Marker) layer.remove();
                 });
 
+                if (listings.length === 0) {
+                    listingsDiv.innerHTML = '<p class="text-center">No sales found.</p>';
+                    return;
+                }
+
                 listings.forEach(listing => {
                     listingsDiv.innerHTML += `
                         <div class="col-md-4 mb-4">
@@ -59,17 +76,21 @@
                                 </div>
                             </div>
                         </div>`;
-                    if (listing.lat && listing.lng) {
+                    if (listing.lat && listing.lng && listing.lat !== 0 && listing.lng !== 0) {
                         L.marker([listing.lat, listing.lng])
                             .addTo(map)
                             .bindPopup(`${listing.title}<br>${listing.location}`);
                     }
                 });
-                if (listings.length > 0 && listings[0].lat && listings[0].lng) {
-                    map.setView([listings[0].lat, listings[0].lng], 10);
+
+                // Center map on first valid location
+                const validListings = listings.filter(l => l.lat && l.lng && l.lat !== 0 && l.lng !== 0);
+                if (validListings.length > 0) {
+                    map.setView([validListings[0].lat, validListings[0].lng], 10);
                 }
             } catch (error) {
                 console.error('Error fetching listings:', error);
+                document.getElementById('listings').innerHTML = '<p class="text-center">Failed to load listings.</p>';
             }
         }
 

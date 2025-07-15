@@ -20,8 +20,8 @@
                 <textarea class="form-control" id="description" required></textarea>
             </div>
             <div class="mb-3">
-                <label for="location" class="form-label">Location (City or Zip)</label>
-                <input type="text" class="form-control" id="location" required>
+                <label for="location" class="form-label">Location (US City or Zip Code)</label>
+                <input type="text" class="form-control" id="location" placeholder="e.g., 62704 or Springfield, IL" required>
             </div>
             <div class="mb-3">
                 <label for="date" class="form-label">Date</label>
@@ -53,9 +53,7 @@
                 description: document.getElementById('description').value,
                 location: document.getElementById('location').value,
                 date: document.getElementById('date').value,
-                itemType: document.getElementById('itemType').value,
-                lat: 0, // Placeholder, update with geocoding if needed
-                lng: 0
+                itemType: document.getElementById('itemType').value
             };
 
             try {
