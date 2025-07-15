@@ -28,5 +28,35 @@
     "lat": 0,
     "lng": 0,
     "id": 3
+  },
+  {
+    "title": "Test Sale",
+    "description": "Test items",
+    "location": "62704",
+    "date": "2025-07-20",
+    "itemType": "furniture",
+    "lat": 39.7749308,
+    "lng": -89.691611,
+    "id": 4
+  },
+  {
+    "title": "City Test Sale",
+    "description": "City items",
+    "location": "Springfield, IL",
+    "date": "2025-07-20",
+    "itemType": "electronics",
+    "lat": 39.7990175,
+    "lng": -89.6439575,
+    "id": 5
+  },
+  {
+    "title": "Test Sale 2",
+    "description": "More Items",
+    "location": "62704",
+    "date": "2025-07-20",
+    "itemType": "collectibles",
+    "lat": 39.7749308,
+    "lng": -89.691611,
+    "id": 6
   }
 ]
