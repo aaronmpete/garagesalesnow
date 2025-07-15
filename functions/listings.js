@@ -42,12 +42,22 @@ exports.handler = async function (event) {
             try {
                 const data = await fs.readFile(listingsPath, 'utf8');
                 listings = JSON.parse(data);
-            } catch (error) {
-                console.error('Error reading listings.json:', error.message);
+            } catch (readError) {
+                console.error('Error reading listings.json:', readError.message);
                 listings = [];
             }
 
-            const newSale = JSON.parse(event.body);
+            let newSale;
+            try {
+                newSale = JSON.parse(event.body);
+                console.log('Parsed sale:', newSale);
+            } catch (parseError) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: 'Invalid JSON: ' + parseError.message })
+                };
+            }
+
             if (!newSale.title || !newSale.location || !newSale.date) {
                 return {
                     statusCode: 400,
@@ -67,7 +77,7 @@ exports.handler = async function (event) {
                         limit: 1,
                         countrycodes: 'us'
                     },
-                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (aaron.m.pete@gmail.com)' }
+                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (your_email@example.com)' }
                 });
                 if (response.data.length > 0) {
                     lat = parseFloat(response.data[0].lat);
@@ -80,11 +90,11 @@ exports.handler = async function (event) {
                         body: JSON.stringify({ error: `Invalid location: ${newSale.location}` })
                     };
                 }
-            } catch (error) {
-                console.error('Geocoding error for', newSale.location, ':', error.message);
+            } catch (geocodeError) {
+                console.error('Geocoding error for', newSale.location, ':', geocodeError.message);
                 return {
-                    statusCode: 400,
-                    body: JSON.stringify({ error: `Geocoding failed for ${newSale.location}` })
+                    statusCode: 500,
+                    body: JSON.stringify({ error: `Geocoding failed: ${geocodeError.message}` })
                 };
             }
 
@@ -92,7 +102,17 @@ exports.handler = async function (event) {
             newSale.lng = lng;
             newSale.id = listings.length ? Math.max(...listings.map(l => l.id)) + 1 : 1;
             listings.push(newSale);
-            await fs.writeFile(listingsPath, JSON.stringify(listings, null, 2));
+
+            try {
+                await fs.writeFile(listingsPath, JSON.stringify(listings, null, 2));
+                console.log('Sale saved successfully');
+            } catch (writeError) {
+                console.error('Write error:', writeError.message);
+                return {
+                    statusCode: 500,
+                    body: JSON.stringify({ error: 'Failed to save sale: ' + writeError.message })
+                };
+            }
 
             return {
                 statusCode: 200,
