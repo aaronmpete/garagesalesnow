@@ -34,3 +34,9 @@ body {
 .filters {
     margin-bottom: 20px;
 }
+.navbar-dark .navbar-nav .nav-link {
+    color: white; /* White nav links */
+}
+.navbar-dark .navbar-nav .nav-link.active {
+    font-weight: bold; /* Highlight active page */
+}
