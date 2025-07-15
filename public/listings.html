@@ -41,15 +41,23 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.7.2/dist/axios.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        let map = L.map('map').setView([39.8283, -98.5795], 4); // Default to US center
+        let map = L.map('map').setView([39.8283, -98.5795], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         async function searchListings() {
-            const search = document.getElementById('searchInput').value;
+            const urlParams = new URLSearchParams(window.location.search);
+            let search = document.getElementById('searchInput').value.trim();
+            if (!search && urlParams.get('location')) {
+                search = decodeURIComponent(urlParams.get('location'));
+                document.getElementById('searchInput').value = search;
+            }
             const itemType = document.getElementById('itemType').value;
-            const params = new URLSearchParams({ location: search, itemType });
+            const params = new URLSearchParams();
+            if (search) params.append('location', search);
+            if (itemType) params.append('itemType', itemType);
+
             try {
                 const response = await axios.get(`/api/listings?${params}`);
                 const listings = response.data;
@@ -83,7 +91,6 @@
                     }
                 });
 
-                // Center map on first valid location
                 const validListings = listings.filter(l => l.lat && l.lng && l.lat !== 0 && l.lng !== 0);
                 if (validListings.length > 0) {
                     map.setView([validListings[0].lat, validListings[0].lng], 10);

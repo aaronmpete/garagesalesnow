@@ -78,5 +78,25 @@
     "lat": 47.6116244,
     "lng": -122.1172925,
     "id": 9
+  },
+  {
+    "title": "Bellevue Sale",
+    "description": "Test items",
+    "location": "98008",
+    "date": "2025-07-20",
+    "itemType": "furniture",
+    "lat": 47.6116244,
+    "lng": -122.1172925,
+    "id": 10
+  },
+  {
+    "title": "Bellevue Sale 2",
+    "description": "More Items",
+    "location": "98808",
+    "date": "2025-07-20",
+    "itemType": "collectibles",
+    "lat": 38.8939168,
+    "lng": -77.0426534,
+    "id": 11
   }
 ]

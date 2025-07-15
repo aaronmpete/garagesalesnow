@@ -1,12 +1,24 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
 }
 .hero {
-    background: url('https://via.placeholder.com/1500x400') no-repeat center;
-    background-size: cover;
-    padding: 100px 0;
+    background: #007bff; /* Solid blue background */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    color: white;
+    color: white; /* Default text color for hero section */
+}
+.hero h1 {
+    color: white; /* White heading for contrast */
+    font-size: 4.5rem;
+    font-weight: 700;
+}
+.hero .lead {
+    color: white; /* White slogan for contrast */
+    font-size: 1.25rem;
 }
 .search-bar {
     max-width: 600px;
