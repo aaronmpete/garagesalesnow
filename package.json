@@ -1,0 +1,13 @@
+{
+  "name": "garagesalesnow",
+  "version": "1.0.0",
+  "dependencies": {
+    "@netlify/functions": "^2.0.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.35.1"
+  },
+  "scripts": {
+    "start": "NODE_NO_WARNINGS=1 netlify dev"
+  }
+}

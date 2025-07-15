@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.hero {
+    background: url('https://via.placeholder.com/1500x400') no-repeat center;
+    background-size: cover;
+    padding: 100px 0;
+    text-align: center;
+    color: white;
+}
+.search-bar {
+    max-width: 600px;
+    margin: 20px auto;
+}
+.featured {
+    padding: 40px 0;
+}
+#map {
+    height: 500px;
+    margin-top: 20px;
+}
+.filters {
+    margin-bottom: 20px;
+}

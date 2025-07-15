@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Multi-Family Garage Sale",
+    "description": "Furniture, clothes, and electronics.",
+    "location": "123 Main St, Springfield, IL",
+    "lat": 39.7817,
+    "lng": -89.6501,
+    "date": "2025-07-20",
+    "itemType": "furniture"
+  },
+  {
+    "id": 2,
+    "title": "Yard Sale Extravaganza",
+    "description": "Books, toys, and collectibles.",
+    "location": "456 Oak Ave, Springfield, IL",
+    "lat": 39.7917,
+    "lng": -89.6601,
+    "date": "2025-07-21",
+    "itemType": "collectibles"
+  }
+]
