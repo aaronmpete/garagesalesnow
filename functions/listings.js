@@ -16,7 +16,8 @@ exports.handler = async function (event) {
             const { location, radius, itemType } = event.queryStringParameters || {};
 
             if (location) {
-                listings = listings.filter(listing => listing.location.toLowerCase().includes(location.toLowerCase()));
+                listings = listings.filter(listing => 
+                    listing.location.toLowerCase().includes(location.toLowerCase()));
             }
             if (itemType) {
                 listings = listings.filter(listing => listing.itemType === itemType);
@@ -42,7 +43,7 @@ exports.handler = async function (event) {
                 const data = await fs.readFile(listingsPath, 'utf8');
                 listings = JSON.parse(data);
             } catch (error) {
-                console.error('Error reading listings.json:', error);
+                console.error('Error reading listings.json:', error.message);
                 listings = [];
             }
 
@@ -54,20 +55,27 @@ exports.handler = async function (event) {
                 };
             }
 
-            // Geocode the location (assume US for zip codes)
+            // Geocode location (zip code or city, US-only)
             let lat = 0, lng = 0;
             try {
+                const query = newSale.location.match(/^\d{5}$/) 
+                    ? `${newSale.location}, United States` 
+                    : `${newSale.location}, USA`;
                 const response = await axios.get('https://nominatim.openstreetmap.org/search', {
                     params: {
-                        q: `${newSale.location}, United States`,
+                        q: query,
                         format: 'json',
-                        limit: 1
+                        limit: 1,
+                        countrycodes: 'us' // Restrict to US
                     },
-                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (your_email@example.com)' }
+                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (aaron.m.pete@gmail.com)' }
                 });
                 if (response.data.length > 0) {
                     lat = parseFloat(response.data[0].lat);
                     lng = parseFloat(response.data[0].lon);
+                    console.log(`Geocoded ${newSale.location} to lat: ${lat}, lng: ${lng}`);
+                } else {
+                    console.log(`No geocoding results for ${newSale.location}`);
                 }
             } catch (error) {
                 console.error('Geocoding error:', error.message);
