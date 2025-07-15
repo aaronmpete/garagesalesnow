@@ -1,16 +1,1 @@
-{
-  "name": "garagesalesnow",
-  "version": "1.0.0",
-  "description": "A website to find and post local garage sales",
-  "main": "index.js",
-  "scripts": {
-    "start": "NODE_NO_WARNINGS=1 netlify dev"
-  },
-  "dependencies": {
-    "@netlify/functions": "^2.0.0",
-    "axios": "^1.7.2"
-  },
-  "devDependencies": {
-    "netlify-cli": "^17.0.0"
-  }
-}
+{"dependencies": {"axios": "^1.7.2"}}
