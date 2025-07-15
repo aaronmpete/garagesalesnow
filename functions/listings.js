@@ -23,7 +23,7 @@ exports.handler = async function (event) {
                 listings = listings.filter(listing => listing.itemType === itemType);
             }
             if (radius) {
-                listings = listings.filter(listing => listing.lat && listing.lng);
+                listings = listings.filter(listing => listing.lat && listing.lng && listing.lat !== 0 && listing.lng !== 0);
             }
 
             return {
@@ -55,7 +55,6 @@ exports.handler = async function (event) {
                 };
             }
 
-            // Geocode location (zip code or city, US-only)
             let lat = 0, lng = 0;
             try {
                 const query = newSale.location.match(/^\d{5}$/) 
@@ -66,7 +65,7 @@ exports.handler = async function (event) {
                         q: query,
                         format: 'json',
                         limit: 1,
-                        countrycodes: 'us' // Restrict to US
+                        countrycodes: 'us'
                     },
                     headers: { 'User-Agent': 'GarageSalesNow/1.0 (aaron.m.pete@gmail.com)' }
                 });
@@ -76,9 +75,17 @@ exports.handler = async function (event) {
                     console.log(`Geocoded ${newSale.location} to lat: ${lat}, lng: ${lng}`);
                 } else {
                     console.log(`No geocoding results for ${newSale.location}`);
+                    return {
+                        statusCode: 400,
+                        body: JSON.stringify({ error: `Invalid location: ${newSale.location}` })
+                    };
                 }
             } catch (error) {
-                console.error('Geocoding error:', error.message);
+                console.error('Geocoding error for', newSale.location, ':', error.message);
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: `Geocoding failed for ${newSale.location}` })
+                };
             }
 
             newSale.lat = lat;

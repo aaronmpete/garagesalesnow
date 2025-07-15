@@ -20,16 +20,6 @@
     "itemType": "collectibles"
   },
   {
-    "title": "d",
-    "description": "d",
-    "location": "98024",
-    "date": "2025-07-12",
-    "itemType": "furniture",
-    "lat": 0,
-    "lng": 0,
-    "id": 3
-  },
-  {
     "title": "Test Sale",
     "description": "Test items",
     "location": "62704",
@@ -58,5 +48,35 @@
     "lat": 39.7749308,
     "lng": -89.691611,
     "id": 6
+  },
+  {
+    "title": "Sammamish Sale",
+    "description": "Test items",
+    "location": "98024",
+    "date": "2025-07-20",
+    "itemType": "furniture",
+    "lat": 47.5626693,
+    "lng": -121.8738922,
+    "id": 7
+  },
+  {
+    "title": "Sammamish Sale",
+    "description": "Test items",
+    "location": "98024",
+    "date": "2025-07-20",
+    "itemType": "furniture",
+    "lat": 47.5626693,
+    "lng": -121.8738922,
+    "id": 8
+  },
+  {
+    "title": "Sammamish Test Sale",
+    "description": "test",
+    "location": "98008",
+    "date": "2025-07-15",
+    "itemType": "collectibles",
+    "lat": 47.6116244,
+    "lng": -122.1172925,
+    "id": 9
   }
 ]
