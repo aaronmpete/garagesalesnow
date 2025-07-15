@@ -77,7 +77,7 @@ exports.handler = async function (event) {
                         limit: 1,
                         countrycodes: 'us'
                     },
-                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (your_email@example.com)' }
+                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (aaron.m.pete@gmail.com)' }
                 });
                 if (response.data.length > 0) {
                     lat = parseFloat(response.data[0].lat);
