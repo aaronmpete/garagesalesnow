@@ -1,10 +1,14 @@
 const fs = require('fs').promises;
 const path = require('path');
+const axios = require('axios');
 
 exports.handler = async function (event) {
     const listingsPath = path.join(__dirname, '../data/listings.json');
 
     try {
+        console.log('Method:', event.httpMethod);
+        console.log('Body:', event.body);
+
         if (event.httpMethod === 'GET') {
             const data = await fs.readFile(listingsPath, 'utf8');
             let listings = JSON.parse(data);
@@ -26,12 +30,55 @@ exports.handler = async function (event) {
                 body: JSON.stringify(listings)
             };
         } else if (event.httpMethod === 'POST') {
+            if (!event.body) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: 'No sale data provided' })
+                };
+            }
+
+            let listings = [];
+            try {
+                const data = await fs.readFile(listingsPath, 'utf8');
+                listings = JSON.parse(data);
+            } catch (error) {
+                console.error('Error reading listings.json:', error);
+                listings = [];
+            }
+
             const newSale = JSON.parse(event.body);
-            const data = await fs.readFile(listingsPath, 'utf8');
-            const listings = JSON.parse(data);
+            if (!newSale.title || !newSale.location || !newSale.date) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: 'Missing required fields' })
+                };
+            }
+
+            // Geocode the location (assume US for zip codes)
+            let lat = 0, lng = 0;
+            try {
+                const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+                    params: {
+                        q: `${newSale.location}, United States`,
+                        format: 'json',
+                        limit: 1
+                    },
+                    headers: { 'User-Agent': 'GarageSalesNow/1.0 (your_email@example.com)' }
+                });
+                if (response.data.length > 0) {
+                    lat = parseFloat(response.data[0].lat);
+                    lng = parseFloat(response.data[0].lon);
+                }
+            } catch (error) {
+                console.error('Geocoding error:', error.message);
+            }
+
+            newSale.lat = lat;
+            newSale.lng = lng;
             newSale.id = listings.length ? Math.max(...listings.map(l => l.id)) + 1 : 1;
             listings.push(newSale);
             await fs.writeFile(listingsPath, JSON.stringify(listings, null, 2));
+
             return {
                 statusCode: 200,
                 body: JSON.stringify({ message: 'Sale posted successfully' })
@@ -43,10 +90,10 @@ exports.handler = async function (event) {
             };
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in handler:', error.message);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Failed to process request' })
+            body: JSON.stringify({ error: 'Failed to process request: ' + error.message })
         };
     }
 };

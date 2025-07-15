@@ -18,5 +18,15 @@
     "lng": -89.6601,
     "date": "2025-07-21",
     "itemType": "collectibles"
+  },
+  {
+    "title": "d",
+    "description": "d",
+    "location": "98024",
+    "date": "2025-07-12",
+    "itemType": "furniture",
+    "lat": 0,
+    "lng": 0,
+    "id": 3
   }
 ]
